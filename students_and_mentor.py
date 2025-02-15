@@ -7,9 +7,6 @@ class Student:
         self.courses_in_progress = []
         self.grades = {}
 
-    def add_courses(self, course_name):
-        self.finished_courses.append(course_name)
-
     def rate_lecturer(self, lecturer, course, grade):
         if isinstance(lecturer, Lecturer) and course in lecturer.courses_attached and course in self.courses_in_progress:
             if course in lecturer.grades:
@@ -78,50 +75,99 @@ class Reviewer(Mentor):
     def __str__(self):
         return f'Имя: {self.name}\nФамилия: {self.surname}'
 
-    
-    
- 
+#Студенты
 student = Student('Ruoy', 'Eman', 'your_gender')
-student.courses_in_progress.append('Python')
 student.courses_in_progress.append('Git')
+student.courses_in_progress.append('Python')
 student.finished_courses.append('Введение в программирование')
+
 student1 = Student('Байков', 'Сергей', 'male')
 student1.courses_in_progress.append('Git')
-student1.finished_courses.append('C++')
+student1.courses_in_progress.append('Python')
+student1.finished_courses.append('Введение в программирование')
 
+#Лекторы
 lector = Lecturer('Mickey', 'Rourke')
 lector.courses_attached.append('Python')
+lector.courses_attached.append('Git')
 lector1 = Lecturer('John', 'Travolta')
 lector1.courses_attached.append('Git')
+lector1.courses_attached.append('Python')
 
-rew = Reviewer('Quentin', 'Tarantino')
-rew.courses_attached.append('Python')
+#Ревьюеры
 rew1 = Reviewer('Sam', 'Smith')
 rew1.courses_attached.append('Git')
+rew1.courses_attached.append('Python')
+rew = Reviewer('Quentin', 'Tarantino')
+rew.courses_attached.append('Python')
+rew.courses_attached.append('Git')
 
-
+#Оценки студентов для лекторов
 student1.rate_lecturer(lector1, 'Git', 6)
+student1.rate_lecturer(lector1, 'Python', 10)
 student.rate_lecturer(lector, 'Python', 8)
-student.rate_lecturer(lector1, 'Git', 10)
+student.rate_lecturer(lector, 'Git', 10)
 
-
+#Оценки ревьюеров для студентов
 rew1.rate_hw(student1, 'Git', 10)
-rew.rate_hw(student, 'Python', 7)
-rew1.rate_hw(student,'Git',2)
+rew1.rate_hw(student1, 'Git', 5)
+rew1.rate_hw(student1, 'Python', 7)
+rew1.rate_hw(student1, 'Python', 5)
 
-if student.mdl() >= lector.mdl():
-    print(student.name, 'bigger mdl than', lector.name)
-else:
-    print(lector.name, 'bigger mdl than', student.name)
-print()
-print(rew)
-print()
-print(lector)
+rew1.rate_hw(student, 'Git', 8)
+rew1.rate_hw(student, 'Git', 3)
+rew1.rate_hw(student, 'Python', 4)
+rew1.rate_hw(student, 'Python', 9)
+
+#Вывод Студенты
+print(student1)
 print()
 print(student)
+
 print()
-print(rew1)
-print()
+#Вывод Лекторы
 print(lector1)
 print()
-print(student1)
+print(lector)
+
+print()
+#Вывод Ревьюеры
+print(rew1)
+print()
+print(rew)
+
+print()
+#Средние оценки студентов
+students = [student, student1]
+def mdl_students_grades():
+    mdl_course_grades = []
+    course_grades = {}
+    for student in students:
+        for course, grades in student.grades.items():
+            if course in course_grades:
+                course_grades[course] += [sum(grades) / len(grades)]
+            else:
+                course_grades[course] = [sum(grades) / len(grades)]
+    for course, grades in course_grades.items():
+        mdl_course_grades.append(f'{course}: {sum(grades) / len(grades)}')
+    return f'Средние оценки студентов по курсам: {" ".join(mdl_course_grades)}'
+
+print(mdl_students_grades())
+
+print()
+#Средние оценки лекторов
+lectors = [lector, lector1]
+def mdl_lector_grades():
+    mdl_course_grades = []
+    course_grades = {}
+    for lector in lectors:
+        for course, grades in lector.grades.items():
+            if course in course_grades:
+                course_grades[course] += [sum(grades) / len(grades)]
+            else:
+                course_grades[course] = [sum(grades) / len(grades)]
+    for course, grades in course_grades.items():
+        mdl_course_grades.append(f'{course}: {sum(grades) / len(grades)}')
+    return f'Средние оценки лекторов по курсам: {" ".join(mdl_course_grades)}'
+
+print(mdl_lector_grades())
